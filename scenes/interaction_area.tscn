@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://dn2juyk7q4y35"]
+
+[ext_resource type="Script" path="res://scenes/interaction_area.gd" id="1_lochu"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wogy3"]
+
+[node name="InteractionArea" type="Area3D"]
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("1_lochu")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_wogy3")

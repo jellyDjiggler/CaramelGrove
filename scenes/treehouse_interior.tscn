@@ -1,0 +1,42 @@
+[gd_scene load_steps=4 format=3 uid="uid://befgu1irlcjht"]
+
+[ext_resource type="PackedScene" uid="uid://d125johp6oulo" path="res://levels/testtreehouseinterior.gltf" id="1_14n2t"]
+[ext_resource type="PackedScene" uid="uid://dem3lnautr53s" path="res://scenes/player.tscn" id="2_i00tv"]
+[ext_resource type="PackedScene" uid="uid://dn2juyk7q4y35" path="res://scenes/interaction_area.tscn" id="3_cf741"]
+
+[node name="TreehouseInterior" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.0841196, -0.776996, 0.623859, -0.59863, 0.539911, 0.591724, -0.796596, -0.323686, -0.510551, 0, 1.47634, 0)
+
+[node name="Player" parent="." instance=ExtResource("2_i00tv")]
+transform = Transform3D(0.999999, 0.00109811, -0.000345491, -0.0010981, 0.999999, 4.13723e-05, 0.000345536, -4.09974e-05, 1, 0.0458091, 1.03887, 0.161723)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.92217, 0)
+light_color = Color(0.996078, 0.85098, 0.541176, 1)
+light_energy = 0.6
+
+[node name="testtreehouseinterior" parent="." instance=ExtResource("1_14n2t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.58583, 1.349, 2.50894)
+visible = false
+use_collision = true
+size = Vector3(3.16185, 3.25654, 1)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.58526, 1.349, 2.50894)
+visible = false
+use_collision = true
+size = Vector3(1.1638, 3.25654, 1)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.493901, 1.349, 3.53973)
+visible = false
+use_collision = true
+size = Vector3(1.1638, 3.25654, 1)
+
+[node name="InteractionArea" parent="." instance=ExtResource("3_cf741")]
+transform = Transform3D(1.94, 0, 0, 0, 1.94, 0, 0, 0, 1.94, -0.516875, 0.931646, 3.52024)

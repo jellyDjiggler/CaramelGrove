@@ -1,0 +1,144 @@
+[gd_scene load_steps=14 format=3 uid="uid://dem3lnautr53s"]
+
+[ext_resource type="Script" path="res://scenes/player.gd" id="1_cqe3t"]
+[ext_resource type="Texture2D" uid="uid://4f26tbp4jcq3" path="res://sprites/testsprite.png" id="1_svp8y"]
+[ext_resource type="Texture2D" uid="uid://bkmhl3i5xykbl" path="res://sprites/epopup.png" id="3_1a56x"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_smvkt"]
+radius = 0.363833
+height = 1.4468
+
+[sub_resource type="Animation" id="Animation_ce73f"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_4a7vg"]
+resource_name = "player_idle"
+length = 1.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 2]
+}
+
+[sub_resource type="Animation" id="Animation_30utr"]
+resource_name = "player_walk"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [1, 2]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fe1sh"]
+_data = {
+"RESET": SubResource("Animation_ce73f"),
+"player_idle": SubResource("Animation_4a7vg"),
+"player_walk": SubResource("Animation_30utr")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_41x5j"]
+animation = &"player_idle"
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_vjc6k"]
+input_0/name = "idle"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "run"
+input_1/auto_advance = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_u2vs7"]
+animation = &"player_walk"
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_ywl00"]
+graph_offset = Vector2(-235.166, -56.2298)
+nodes/Idle/node = SubResource("AnimationNodeAnimation_41x5j")
+nodes/Idle/position = Vector2(142, 130)
+nodes/Movement/node = SubResource("AnimationNodeTransition_vjc6k")
+nodes/Movement/position = Vector2(320, 140)
+nodes/Run/node = SubResource("AnimationNodeAnimation_u2vs7")
+nodes/Run/position = Vector2(140, 240)
+nodes/output/position = Vector2(1140, 120)
+node_connections = [&"output", 0, &"Movement", &"Movement", 0, &"Idle", &"Movement", 1, &"Run"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hr54w"]
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_cqe3t")
+
+[node name="PlayerSprite" type="Sprite3D" parent="."]
+pixel_size = 0.03
+billboard = 2
+alpha_cut = 2
+texture_filter = 0
+texture = ExtResource("1_svp8y")
+hframes = 3
+frame = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_smvkt")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 1, 4)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_fe1sh")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeBlendTree_ywl00")
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/Movement/current_state = "idle"
+parameters/Movement/transition_request = ""
+parameters/Movement/current_index = 0
+
+[node name="InteractionComponents" type="Node3D" parent="."]
+
+[node name="InteractSprite" type="Sprite3D" parent="InteractionComponents"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.702363, 0)
+visible = false
+pixel_size = 0.04
+billboard = 2
+texture_filter = 0
+texture = ExtResource("3_1a56x")
+
+[node name="InteractionArea" type="Area3D" parent="InteractionComponents"]
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionComponents/InteractionArea"]
+shape = SubResource("CapsuleShape3D_hr54w")
+
+[connection signal="area_entered" from="InteractionComponents/InteractionArea" to="." method="_on_interaction_area_area_entered"]
+[connection signal="area_exited" from="InteractionComponents/InteractionArea" to="." method="_on_interaction_area_area_exited"]
